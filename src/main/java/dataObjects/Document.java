@@ -23,6 +23,10 @@ public class Document implements IDocument {
     private ArrayList<ICreator> creators;
     private ArrayList<IContributor> contributors;
 
+    public Document(String identifier){
+        this.identifier = identifier;
+    }
+
     /** GETTERS */
     public String getIdentifier() {return identifier;}
     public String getLocationURL() {return locationURL;}
@@ -79,5 +83,10 @@ public class Document implements IDocument {
         }
 
         contributors.add(contributor);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

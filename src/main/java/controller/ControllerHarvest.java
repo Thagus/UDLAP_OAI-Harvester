@@ -1,7 +1,6 @@
 package controller;
 
 import harvester.DCHarvester;
-import javafx.scene.control.Alert;
 import model.ModelDatabase;
 
 import java.util.ArrayList;
@@ -17,12 +16,12 @@ public class ControllerHarvest {
 
         seeds.add("http://catarina.udlap.mx/tales/oai/");
 
-        /*try {
+        try {
             for(String site : seeds)
                 dcHarvester.harvest(site);
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
 
         //A message to alert the user about the number of read documents
         System.out.println("Read " + db.docOps.countDocuments() + " documents");

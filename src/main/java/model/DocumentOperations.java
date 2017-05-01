@@ -1,5 +1,8 @@
 package model;
 
+import dataObjects.Document;
+import interfaces.IDocument;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,5 +50,10 @@ public class DocumentOperations {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public boolean addDocument(IDocument doc) {
+
+        return false;
     }
 }
