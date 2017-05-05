@@ -1,11 +1,14 @@
 package harvester.model;
 
+import harvester.dataObjects.Contributor;
 import harvester.dataObjects.Creator;
+import harvester.dataObjects.Document;
 import interfaces.IContributor;
 import interfaces.ICreator;
 import interfaces.IDocument;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Created by Thagus on 30/04/17.
@@ -22,6 +25,7 @@ public class DocumentOperations {
     private PreparedStatement stDeleteDocument;
 
     private PreparedStatement stGetDocument;
+    private PreparedStatement stGetDocuments;
     private PreparedStatement stGetCreator;
     private PreparedStatement stGetContributor;
     private PreparedStatement stGetDocumentType;
@@ -39,6 +43,7 @@ public class DocumentOperations {
         stDeleteDocument = con.prepareStatement("DELETE FROM UDLAPOAI.DOCUMENT WHERE documentID=?");
 
         stGetDocument = con.prepareStatement("SELECT * FROM UDLAPOAI.DOCUMENT WHERE documentID=?");
+        stGetDocuments = con.prepareStatement("SELECT * FROM UDLAPOAI.DOCUMENT");
         stGetCreator = con.prepareStatement("SELECT * FROM UDLAPOAI.CREATOR WHERE documentID=?");
         stGetContributor = con.prepareStatement("SELECT * FROM UDLAPOAI.CONTRIBUTOR WHERE documentID=?");
         stGetDocumentType = con.prepareStatement("SELECT * FROM UDLAPOAI.DOCUMENTTYPE WHERE documentID=?");
@@ -144,6 +149,132 @@ public class DocumentOperations {
     }
 
     public IDocument getDocument(String documentID){
+        try{
+            stGetDocument.setString(1, documentID);
+            ResultSet documentRS = stGetDocument.executeQuery();
+
+            while(documentRS.next()){
+                Document document = new Document(documentID);
+                document.setLocationURL(documentRS.getString("locationURL"));
+                document.setTitle(documentRS.getString("title"));
+                document.setDescription(documentRS.getString("description"));
+                document.setPublisher(documentRS.getString("publisher"));
+                document.setDate(documentRS.getDate("date"));
+                document.setLanguage(documentRS.getString("language"));
+
+                //Retrieve the document types
+                stGetDocumentType.setString(1, documentID);
+                ResultSet typeRS = stGetDocumentType.executeQuery();
+
+                while (typeRS.next()){
+                    document.addType(typeRS.getString("documentType"));
+                }
+
+                //Retrieve the document formats
+                stGetDocumentFormat.setString(1, documentID);
+                ResultSet formatRS = stGetDocumentFormat.executeQuery();
+
+                while (formatRS.next()){
+                    document.addFormat(documentRS.getString("documentFormat"));
+                }
+
+                //Retrieve contributors
+                stGetContributor.setString(1, documentID);
+                ResultSet contributorRS = stGetContributor.executeQuery();
+
+                while (contributorRS.next()){
+                    document.addContributor(
+                            new Contributor(contributorRS.getString("contributorName"))
+                    );
+                }
+
+                //Retrieve cretors
+                stGetCreator.setString(1, documentID);
+                ResultSet creatorsRS = stGetCreator.executeQuery();
+
+                while (creatorsRS.next()){
+                    document.addCreator(
+                            new Creator(
+                                    creatorsRS.getString("creatorName"),
+                                    creatorsRS.getString("career"),
+                                    creatorsRS.getString("degree")
+                            )
+                    );
+                }
+
+                return document;
+            }
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public ArrayList<IDocument> getDocuments() {
+        try{
+            ResultSet documentRS = stGetDocuments.executeQuery();
+
+            ArrayList<IDocument> documents = new ArrayList<>();
+
+            while(documentRS.next()){
+                Document document = new Document(documentRS.getString("documentID"));
+                document.setLocationURL(documentRS.getString("locationURL"));
+                document.setTitle(documentRS.getString("title"));
+                document.setDescription(documentRS.getString("description"));
+                document.setPublisher(documentRS.getString("publisher"));
+                document.setDate(documentRS.getDate("date"));
+                document.setLanguage(documentRS.getString("language"));
+
+                //Retrieve the document types
+                stGetDocumentType.setString(1, document.getDocumentID());
+                ResultSet typeRS = stGetDocumentType.executeQuery();
+
+                while (typeRS.next()){
+                    document.addType(typeRS.getString("documentType"));
+                }
+
+                //Retrieve the document formats
+                stGetDocumentFormat.setString(1, document.getDocumentID());
+                ResultSet formatRS = stGetDocumentFormat.executeQuery();
+
+                while (formatRS.next()){
+                    document.addFormat(documentRS.getString("documentFormat"));
+                }
+
+                //Retrieve contributors
+                stGetContributor.setString(1, document.getDocumentID());
+                ResultSet contributorRS = stGetContributor.executeQuery();
+
+                while (contributorRS.next()){
+                    document.addContributor(
+                            new Contributor(contributorRS.getString("contributorName"))
+                    );
+                }
+
+                //Retrieve cretors
+                stGetCreator.setString(1, document.getDocumentID());
+                ResultSet creatorsRS = stGetCreator.executeQuery();
+
+                while (creatorsRS.next()){
+                    document.addCreator(
+                            new Creator(
+                                    creatorsRS.getString("creatorName"),
+                                    creatorsRS.getString("career"),
+                                    creatorsRS.getString("degree")
+                            )
+                    );
+                }
+
+                documents.add(document);
+            }
+
+            return documents;
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
 
         return null;
     }

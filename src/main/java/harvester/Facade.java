@@ -4,6 +4,8 @@ import harvester.model.DCHarvester;
 import harvester.model.ModelDatabase;
 import interfaces.IDocument;
 
+import java.util.ArrayList;
+
 /**
  * Created by Thagus on 05/05/17.
  */
@@ -17,6 +19,18 @@ public class Facade {
 
     public void addDocument(IDocument document){
         db.docOps.addDocument(document);
+    }
+
+    public ArrayList<IDocument> getDocuments(){
+        return db.docOps.getDocuments();
+    }
+
+    public IDocument getDocument(String identifier){
+        return db.docOps.getDocument(identifier);
+    }
+
+    public ArrayList<IDocument> getDocumentsByTitle(String title){
+        return null;
     }
 
     public void doHarvest(){
