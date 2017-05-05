@@ -39,6 +39,8 @@ public class DCHarvester {
 
         //To list all identifiers in the repository that has "oai_dc" metadata
         IdentifiersList list = server.listIdentifiers("oai_dc");
+        System.out.println("To read: " + list.size() + " documents");
+
         boolean more = true;
         while (more) {
             for (Header header : list.asList()) {
@@ -54,12 +56,15 @@ public class DCHarvester {
 
                 //Now use the dom4j to handle the metadata
                 Element root = record.getMetadata();
+
                 //Iterate through every element withing the record to obtain the metadata
                 for (Iterator i = root.elementIterator(); i.hasNext(); ) {
                     Element element = (Element) i.next();
 
                     String elementName = element.getName();
                     String elementText = element.getText();
+
+                    //System.out.println(elementName + ": " + elementText);
 
                     if(elementText.length()>0) {
                         switch (elementName) {
@@ -110,6 +115,8 @@ public class DCHarvester {
                     }
                 }
 
+                System.out.println("===========================================================");
+
                 for(int i=0; i<creatorNames.size(); i++){
                     Creator creator = new Creator(creatorNames.get(i), careers.get(i), academicDegrees.get(i));
                     document.addCreator(creator);
@@ -136,10 +143,7 @@ public class DCHarvester {
      */
     private synchronized void feedDatabase(Document doc){
         if(doc.getLocationURL()!=null && doc.getLocationURL().length()>0) {
-            boolean insertCheck = db.docOps.addDocument(doc);
-            if(!insertCheck){
-                System.out.println("Failed to add: " + doc.getDocumentID());
-            }
+            db.docOps.addDocument(doc);
         }
     }
 }

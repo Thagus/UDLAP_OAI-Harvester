@@ -9,7 +9,7 @@ import interfaces.IDocument;
  */
 public class Facade {
     private ModelDatabase db;
-    private String SITE = "http://catarina.udlap.mx/tales/oai/";
+    private String SITE = "http://catarina.udlap.mx/tales/oai/requestETD.jsp";
 
     public Facade(){
         this.db = ModelDatabase.instance();

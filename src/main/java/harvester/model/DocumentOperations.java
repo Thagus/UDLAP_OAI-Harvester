@@ -5,10 +5,7 @@ import interfaces.IContributor;
 import interfaces.ICreator;
 import interfaces.IDocument;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created by Thagus on 30/04/17.
@@ -83,42 +80,56 @@ public class DocumentOperations {
             stAddDocument.setString(1, doc.getDocumentID());
             stAddDocument.setString(2, doc.getLocationURL());
             stAddDocument.setString(3, doc.getTitle());
-            stAddDocument.setString(4, doc.getDescription());
+            if(doc.getDescription()==null){
+                stAddDocument.setNull(4, Types.VARCHAR);
+            } else {
+                stAddDocument.setString(4, doc.getDescription());
+            }
             stAddDocument.setString(5, doc.getPublisher());
             stAddDocument.setDate(6, doc.getDate());
             stAddDocument.setString(7, doc.getLanguage());
 
             stAddDocument.executeUpdate();
 
-            for(ICreator creator : doc.getCreators()){
-                stAddCreator.setString(1, doc.getDocumentID());
-                stAddCreator.setString(2, creator.getName());
-                stAddCreator.setString(3, creator.getCareer());
-                stAddCreator.setString(4, creator.getDegree());
+            if(doc.getCreators()!=null) {
+                for (ICreator creator : doc.getCreators()) {
+                    stAddCreator.setString(1, doc.getDocumentID());
+                    stAddCreator.setString(2, creator.getName());
+                    stAddCreator.setString(3, creator.getCareer());
+                    stAddCreator.setString(4, creator.getDegree());
 
-                stAddCreator.executeUpdate();
+                    stAddCreator.executeUpdate();
+                }
             }
 
-            for(IContributor contributor : doc.getContributors()){
-                stAddContributor.setString(1, doc.getDocumentID());
-                stAddContributor.setString(2, contributor.getName());
+            if(doc.getContributors()!=null) {
+                for (IContributor contributor : doc.getContributors()) {
+                    stAddContributor.setString(1, doc.getDocumentID());
+                    stAddContributor.setString(2, contributor.getName());
 
-                stAddContributor.executeUpdate();
+                    stAddContributor.executeUpdate();
+                }
             }
 
-            for(String type : doc.getTypes()){
-                stAddDocumentType.setString(1, doc.getDocumentID());
-                stAddDocumentType.setString(2, type);
+            if(doc.getTypes()!=null) {
+                for (String type : doc.getTypes()) {
+                    stAddDocumentType.setString(1, doc.getDocumentID());
+                    stAddDocumentType.setString(2, type);
 
-                stAddDocumentType.executeUpdate();
+                    stAddDocumentType.executeUpdate();
+                }
             }
 
-            for(String format : doc.getFormats()){
-                stAddDocumentFormat.setString(1, doc.getDocumentID());
-                stAddDocumentFormat.setString(2, format);
+            if(doc.getFormats()!=null) {
+                for (String format : doc.getFormats()) {
+                    stAddDocumentFormat.setString(1, doc.getDocumentID());
+                    stAddDocumentFormat.setString(2, format);
 
-                stAddDocumentFormat.executeUpdate();
+                    stAddDocumentFormat.executeUpdate();
+                }
             }
+
+            return true;
         } catch(SQLException e){
             //The insertion fails due to duplicate key
             if(e.getErrorCode()==23505){

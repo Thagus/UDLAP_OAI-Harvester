@@ -84,7 +84,7 @@ public class ModelDatabase {
                     "documentID VARCHAR NOT NULL," +
                     "locationURL VARCHAR NOT NULL," +
                     "title VARCHAR NOT NULL," +
-                    "description VARCHAR NOT NULL," +
+                    "description VARCHAR," +
                     "publisher VARCHAR NOT NULL," +
                     "date DATE NOT NULL," +
                     "language CHAR(2) NOT NULL," +         //Detected language has 2 letter
