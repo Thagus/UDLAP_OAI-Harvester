@@ -11,6 +11,7 @@ import se.kb.oai.pmh.OaiPmhServer;
 import se.kb.oai.pmh.Record;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -91,7 +92,7 @@ public class DCHarvester {
                                 break;
                             case "date":
                                 try {
-                                    document.setDate(df.parse(elementText));
+                                    document.setDate(new Date(df.parse(elementText).getTime()));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -137,7 +138,7 @@ public class DCHarvester {
         if(doc.getLocationURL()!=null && doc.getLocationURL().length()>0) {
             boolean insertCheck = db.docOps.addDocument(doc);
             if(!insertCheck){
-                System.out.println("Failed to add: " + doc.getIdentifier());
+                System.out.println("Failed to add: " + doc.getDocumentID());
             }
         }
     }
