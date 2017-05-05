@@ -5,10 +5,7 @@ import harvester.dataObjects.Creator;
 import harvester.dataObjects.Document;
 import org.dom4j.Element;
 import se.kb.oai.OAIException;
-import se.kb.oai.pmh.Header;
-import se.kb.oai.pmh.IdentifiersList;
-import se.kb.oai.pmh.OaiPmhServer;
-import se.kb.oai.pmh.Record;
+import se.kb.oai.pmh.*;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -38,15 +35,18 @@ public class DCHarvester {
         OaiPmhServer server = new OaiPmhServer(repository);
 
         //To list all identifiers in the repository that has "oai_dc" metadata
-        IdentifiersList list = server.listIdentifiers("oai_dc");
-        System.out.println("To read: " + list.size() + " documents");
+        //IdentifiersList list = server.listIdentifiers("oai_dc");
+        //System.out.println("To read: " + list.size() + " documents");
+
+        RecordsList recordsList = server.listRecords("oai_dc");
+        System.out.println("To read: " + recordsList.size() + " documents");
 
         boolean more = true;
         while (more) {
-            for (Header header : list.asList()) {
+            for (Record record : recordsList.asList()) {
                 //Read the record of the given identifier
-                Record record = server.getRecord(header.getIdentifier(), "oai_dc");
-
+                //Record record = server.getRecord(header.getIdentifier(), "oai_dc");
+                Header header = record.getHeader();
                 Document document = new Document(header.getIdentifier());
 
                 ArrayList<String> careers = new ArrayList<>();
@@ -115,7 +115,7 @@ public class DCHarvester {
                     }
                 }
 
-                System.out.println("===========================================================");
+                //System.out.println("===========================================================");
 
                 for(int i=0; i<creatorNames.size(); i++){
                     Creator creator = new Creator(creatorNames.get(i), careers.get(i), academicDegrees.get(i));
@@ -129,8 +129,10 @@ public class DCHarvester {
 
                 feedDatabase(document);
             }
-            if (list.getResumptionToken() != null)
-                list = server.listIdentifiers(list.getResumptionToken());
+            //if (list.getResumptionToken() != null)
+            //    list = server.listIdentifiers(list.getResumptionToken());
+            if(recordsList.getResumptionToken() != null)
+                recordsList = server.listRecords(recordsList.getResumptionToken());
             else
                 more = false;
         }
