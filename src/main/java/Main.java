@@ -1,5 +1,4 @@
 import harvester.Facade;
-import harvester.dataObjects.Contributor;
 import interfaces.IContributor;
 import interfaces.ICreator;
 import interfaces.IDocument;
