@@ -240,7 +240,7 @@ public class DocumentOperations {
                 ResultSet formatRS = stGetDocumentFormat.executeQuery();
 
                 while (formatRS.next()){
-                    document.addFormat(documentRS.getString("documentFormat"));
+                    document.addFormat(formatRS.getString("documentFormat"));
                 }
 
                 //Retrieve contributors
