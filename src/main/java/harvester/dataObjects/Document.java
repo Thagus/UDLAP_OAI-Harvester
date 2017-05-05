@@ -1,4 +1,4 @@
-package dataObjects;
+package harvester.dataObjects;
 
 import interfaces.IContributor;
 import interfaces.ICreator;

@@ -1,6 +1,5 @@
-package model;
+package harvester.model;
 
-import dataObjects.Document;
 import interfaces.IDocument;
 
 import java.sql.Connection;

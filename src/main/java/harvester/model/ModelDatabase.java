@@ -1,4 +1,4 @@
-package model;
+package harvester.model;
 
 import javax.swing.*;
 import java.sql.Connection;

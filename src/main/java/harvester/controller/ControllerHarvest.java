@@ -1,7 +1,7 @@
-package controller;
+package harvester.controller;
 
-import harvester.DCHarvester;
-import model.ModelDatabase;
+import harvester.model.DCHarvester;
+import harvester.model.ModelDatabase;
 
 import java.util.ArrayList;
 
