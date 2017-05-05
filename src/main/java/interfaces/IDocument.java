@@ -1,13 +1,13 @@
 package interfaces;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by Thagus on 30/04/17.
  */
 public interface IDocument {
-    String getIdentifier();
+    String getDocumentID();
     String getLocationURL();
     String getTitle();
     String getDescription();
@@ -21,7 +21,7 @@ public interface IDocument {
     ArrayList<IContributor> getContributors();
 
 
-    void setIdentifier(String identifier);
+    void setDocumentID(String documentID);
     void setLocationURL(String locationURL);
     void setTitle(String title);
     void setDescription(String description);

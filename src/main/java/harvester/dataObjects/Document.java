@@ -5,13 +5,13 @@ import interfaces.ICreator;
 import interfaces.IDocument;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by Thagus on 30/04/17.
  */
 public class Document implements IDocument {
-    private String identifier;
+    private String documentID;
     private String locationURL;
     private String title;
     private String description;
@@ -23,12 +23,12 @@ public class Document implements IDocument {
     private ArrayList<ICreator> creators;
     private ArrayList<IContributor> contributors;
 
-    public Document(String identifier){
-        this.identifier = identifier;
+    public Document(String documentID){
+        this.documentID = documentID;
     }
 
     /** GETTERS */
-    public String getIdentifier() {return identifier;}
+    public String getDocumentID() {return documentID;}
     public String getLocationURL() {return locationURL;}
     public String getTitle() {return title;}
     public String getDescription() {return description;}
@@ -41,7 +41,7 @@ public class Document implements IDocument {
     public ArrayList<IContributor> getContributors() {return contributors;}
 
     /** SETTERS */
-    public void setIdentifier(String identifier) {this.identifier = identifier;}
+    public void setDocumentID(String documentID) {this.documentID = documentID;}
     public void setLocationURL(String locationURL) {this.locationURL = locationURL;}
     public void setTitle(String title) {this.title = title;}
     public void setDescription(String description) {this.description = description;}
