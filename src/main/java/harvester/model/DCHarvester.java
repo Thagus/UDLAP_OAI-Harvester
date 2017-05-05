@@ -1,5 +1,7 @@
 package harvester.model;
 
+import harvester.dataObjects.Contributor;
+import harvester.dataObjects.Creator;
 import harvester.dataObjects.Document;
 import org.dom4j.Element;
 import se.kb.oai.OAIException;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -43,6 +46,11 @@ public class DCHarvester {
 
                 Document document = new Document(header.getIdentifier());
 
+                ArrayList<String> careers = new ArrayList<>();
+                ArrayList<String> academicDegrees = new ArrayList<>();
+                ArrayList<String> creatorNames = new ArrayList<>();
+                ArrayList<String> contributorNames = new ArrayList<>();
+
                 //Now use the dom4j to handle the metadata
                 Element root = record.getMetadata();
                 //Iterate through every element withing the record to obtain the metadata
@@ -64,13 +72,13 @@ public class DCHarvester {
                                 document.addType(elementText);
                                 break;
                             case "subject": //Career of Creator
-
+                                careers.add(elementText);
                                 break;
                             case "creator": //Name of Creator
-
+                                creatorNames.add(elementText);
                                 break;
                             case "contributor": //Name of Contributor
-
+                                contributorNames.add(elementText);
                                 break;
                             case "description":
                                 document.setDescription(elementText);
@@ -89,16 +97,26 @@ public class DCHarvester {
                                 }
                                 break;
                             case "coverage":    //Academic degree of Creator
-
+                                academicDegrees.add(elementText);
                                 break;
                             case "language":
                                 document.setLanguage(elementText);
                                 break;
                             default:
-
+                                System.out.println("Metadata not recognized: " + elementName + " \"" + elementText + "\"");
                                 break;
                         }
                     }
+                }
+
+                for(int i=0; i<creatorNames.size(); i++){
+                    Creator creator = new Creator(creatorNames.get(i), careers.get(i), academicDegrees.get(i));
+                    document.addCreator(creator);
+                }
+
+                for(String name : contributorNames){
+                    Contributor contributor = new Contributor(name);
+                    document.addContributor(contributor);
                 }
 
                 feedDatabase(document);
@@ -118,7 +136,9 @@ public class DCHarvester {
     private synchronized void feedDatabase(Document doc){
         if(doc.getLocationURL()!=null && doc.getLocationURL().length()>0) {
             boolean insertCheck = db.docOps.addDocument(doc);
-
+            if(!insertCheck){
+                System.out.println("Failed to add: " + doc.getIdentifier());
+            }
         }
     }
 }
