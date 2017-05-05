@@ -10,6 +10,12 @@ public class Creator implements ICreator {
     private String career;
     private String degree;
 
+    public Creator(String name, String career, String degree) {
+        this.name = name;
+        this.career = career;
+        this.degree = degree;
+    }
+
     /** GETTERS */
     public String getName() {return name;}
     public String getCareer() {return career;}
